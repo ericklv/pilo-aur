@@ -1,0 +1,6 @@
+out/
+*/src/
+*/pkg/
+*.deb
+*.pkg.tar.*
+todo_repo.md

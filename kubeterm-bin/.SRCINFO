@@ -1,0 +1,19 @@
+pkgbase = kubeterm-bin
+	pkgdesc = Kubernetes monitoring and management desktop client
+	pkgver = 2.8.3
+	pkgrel = 1
+	url = https://github.com/kbterm/kubeterm
+	arch = x86_64
+	license = LicenseRef-kubeterm
+	depends = gtk3
+	depends = libsecret
+	depends = libepoxy
+	depends = xdg-utils
+	provides = kubeterm
+	conflicts = kubeterm
+	options = !strip
+	options = !debug
+	source = https://github.com/kbterm/kubeterm/releases/download/v2.8.3/kubeterm-2.8.3-x86_64.deb
+	sha256sums = 5eaa4f6c8345e6efd4cfbdec42b935d3d442c92f63e2f1f1b11884d30a51211a
+
+pkgname = kubeterm-bin

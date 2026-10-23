@@ -1,0 +1,17 @@
+pkgbase = radar-bin
+	pkgdesc = Kubernetes visibility desktop app — topology, traffic, and Helm management
+	pkgver = 1.18.0
+	pkgrel = 1
+	url = https://github.com/skyhook-io/radar
+	arch = x86_64
+	license = Apache-2.0
+	depends = gtk3
+	depends = webkit2gtk-4.1
+	provides = radar-desktop
+	conflicts = radar-desktop
+	options = !strip
+	options = !debug
+	source = https://github.com/skyhook-io/radar/releases/download/v1.18.0/radar-desktop_v1.18.0_linux_amd64.deb
+	sha256sums = 939982561914586b049c6961896591d883045bf464171157e5db6a38d77efc18
+
+pkgname = radar-bin
