@@ -1,0 +1,60 @@
+pkgname=orchard
+_tag=1.0.0-canary.9
+pkgver=${_tag//-/}
+pkgrel=1
+pkgdesc="The power-user desktop client for YouTube Music"
+arch=('x86_64')
+url="https://github.com/SFG5453/Orchard"
+license=('AGPL-3.0-or-later' 'LicenseRef-PolyForm-Shield-1.0.0')
+depends=('qt6-base' 'qt6-declarative' 'qt6-multimedia' 'qt6-webengine' 'qt6-webview'
+         'qt6-webchannel' 'qt6-positioning' 'qt6-websockets' 'libsecret' 'ffmpeg')
+makedepends=('git' 'meson' 'ninja' 'cmake' 'clang' 'mold' 'rust' 'nodejs' 'npm' 'python'
+             'qt6-shadertools' 'qt6-tools' 'vulkan-headers')
+options=('!debug' '!lto')
+source=("Orchard::git+$url.git#tag=v$_tag")
+sha256sums=('SKIP')
+
+prepare() {
+  cd Orchard
+  # nested submodules (libdatachannel, mbedtls) aren't expressible as makepkg sources
+  git submodule update --init --recursive --depth 1
+}
+
+build() {
+  cd Orchard
+  export CC=clang CXX=clang++ CC_LD=mold CXX_LD=mold
+  npm ci --prefix providers/youtube
+  meson setup build --buildtype release -Dtests=false
+  meson compile -C build
+}
+
+package() {
+  cd Orchard
+  local dest="$pkgdir/usr/lib/orchard"
+  install -d "$dest"
+  install -m755 build/orchard build/orchard-auth-helper build/orchard-adaptive-mix -t "$dest"
+  install -m755 build/libwebgpu_dawn.so build/libdiscord_partner_sdk.so build/libLiteRt.so -t "$dest"
+  cp -a build/models "$dest/"
+
+  install -Dm755 /dev/stdin "$pkgdir/usr/bin/orchard" <<'EOF'
+#!/bin/sh
+export PATH="/usr/lib/orchard:$PATH"
+exec /usr/lib/orchard/orchard "$@"
+EOF
+
+  install -Dm644 /dev/stdin "$pkgdir/usr/share/applications/orchard.desktop" <<'EOF'
+[Desktop Entry]
+Type=Application
+Name=Orchard
+Exec=orchard
+Icon=orchard
+Categories=AudioVideo;Audio;Player;
+EOF
+  install -Dm644 app/qml/assets/orchard-logo.png "$pkgdir/usr/share/pixmaps/orchard.png"
+
+  # the set of LICENSE* files changes between tags (OOL -> PolyForm Shield)
+  install -Dm644 LICENSE* THIRD_PARTY_NOTICES.md -t "$pkgdir/usr/share/licenses/$pkgname"
+  install -Dm644 vendor/discord_social_sdk/License-Notices.txt \
+    "$pkgdir/usr/share/licenses/$pkgname/DiscordSocialSdk-Notices.txt"
+  install -Dm644 vendor/litert/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LiteRT-LICENSE.txt"
+}

@@ -1,0 +1,37 @@
+pkgbase = orchard
+	pkgdesc = The power-user desktop client for YouTube Music
+	pkgver = 1.0.0canary.9
+	pkgrel = 1
+	url = https://github.com/SFG5453/Orchard
+	arch = x86_64
+	license = AGPL-3.0-or-later
+	license = LicenseRef-PolyForm-Shield-1.0.0
+	makedepends = git
+	makedepends = meson
+	makedepends = ninja
+	makedepends = cmake
+	makedepends = clang
+	makedepends = mold
+	makedepends = rust
+	makedepends = nodejs
+	makedepends = npm
+	makedepends = python
+	makedepends = qt6-shadertools
+	makedepends = qt6-tools
+	makedepends = vulkan-headers
+	depends = qt6-base
+	depends = qt6-declarative
+	depends = qt6-multimedia
+	depends = qt6-webengine
+	depends = qt6-webview
+	depends = qt6-webchannel
+	depends = qt6-positioning
+	depends = qt6-websockets
+	depends = libsecret
+	depends = ffmpeg
+	options = !debug
+	options = !lto
+	source = Orchard::git+https://github.com/SFG5453/Orchard.git#tag=v1.0.0-canary.9
+	sha256sums = SKIP
+
+pkgname = orchard
