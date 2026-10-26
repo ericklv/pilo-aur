@@ -38,7 +38,7 @@ Updates arrive with the usual `sudo pacman -Syu`.
 
 ## How it works
 
-`.github/workflows/build.yml` runs daily (and on manual dispatch or PKGBUILD changes) and calls `build.sh`, which for every line in `packages.txt`:
+`.github/workflows/build.yml` runs twice a day at 06:00 and 18:00 UTC-5 (and on manual dispatch or PKGBUILD changes) and calls `build.sh`, which for every line in `packages.txt`:
 
 1. Checks the upstream latest release (or latest commit for `-git` packages) and bumps `pkgver`, `pkgrel`, `sha256sums` and `.SRCINFO` if needed.
 2. Builds the package if it isn't already in the release, signs it, and adds it to the `void` database with `repo-add --sign`.

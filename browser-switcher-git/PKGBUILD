@@ -8,6 +8,7 @@ url="https://github.com/ericklv/browser-switcher"
 license=('AGPL-3.0-only')
 depends=('dbus' 'xdg-utils')
 makedepends=('git' 'go')
+options=('!debug')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
 source=("git+$url.git")

@@ -10,6 +10,7 @@ depends=('dbus')
 optdepends=('kubectl: switch contexts (any kubectl in PATH works)'
             'google-cloud-cli: GKE sessions and kubetray-sync-gke')
 makedepends=('git' 'go')
+options=('!debug')
 provides=("$_pkgname")
 conflicts=("$_pkgname")
 source=("git+$url.git")

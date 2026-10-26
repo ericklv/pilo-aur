@@ -2,7 +2,7 @@ name: build
 
 on:
   schedule:
-    - cron: "0 6 * * *"
+    - cron: "0 11,23 * * *" # 06:00 and 18:00 UTC-5
   workflow_dispatch:
   push:
     branches: [main]

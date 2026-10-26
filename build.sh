@@ -76,7 +76,8 @@ while read -r dir upstream; do
     fi
   fi
 
-  pkgfile=$(basename "$(as_builder "$pkgdir" "makepkg --packagelist")")
+  pkgfile=$(as_builder "$pkgdir" "makepkg --packagelist" | grep -v -- "-debug-" | head -1)
+  pkgfile=$(basename "$pkgfile")
   if grep -qxF "$pkgfile" <<<"$assets"; then
     log "$dir: $pkgfile already published"
     continue

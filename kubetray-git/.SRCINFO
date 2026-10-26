@@ -12,6 +12,7 @@ pkgbase = kubetray-git
 	optdepends = google-cloud-cli: GKE sessions and kubetray-sync-gke
 	provides = kubetray
 	conflicts = kubetray
+	options = !debug
 	source = git+https://github.com/ericklv/kubetray.git
 	sha256sums = SKIP
 

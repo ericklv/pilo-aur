@@ -11,6 +11,7 @@ pkgbase = browser-switcher-git
 	depends = xdg-utils
 	provides = browser-switcher
 	conflicts = browser-switcher
+	options = !debug
 	source = git+https://github.com/ericklv/browser-switcher.git
 	sha256sums = SKIP
 
