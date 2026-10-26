@@ -1,0 +1,31 @@
+pkgname=fetch-git
+_pkgname=fetch
+pkgver=2.3.0.r25.ge308781
+pkgrel=1
+pkgdesc="An animated 3D fetch tool for your terminal"
+arch=('x86_64')
+url="https://github.com/areofyl/fetch"
+license=('ISC')
+depends=('glibc')
+makedepends=('git')
+options=('!debug')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  git describe --tags --long --always | sed 's/^v//; s/\([^-]*-g\)/r\1/; s/-/./g'
+}
+
+build() {
+  cd "$_pkgname"
+  make
+}
+
+package() {
+  cd "$_pkgname"
+  make DESTDIR="$pkgdir" PREFIX=/usr install
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

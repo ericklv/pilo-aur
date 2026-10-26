@@ -10,6 +10,7 @@ Personal pacman repository (`[void]`), built by GitHub Actions and served from t
 | `hoppscotch-bin` | [hoppscotch/releases](https://github.com/hoppscotch/releases) |
 | `kubetray-git` | [ericklv/kubetray](https://github.com/ericklv/kubetray) (latest commit) |
 | `browser-switcher-git` | [ericklv/browser-switcher](https://github.com/ericklv/browser-switcher) (latest commit) |
+| `fetch-git` | [areofyl/fetch](https://github.com/areofyl/fetch) (latest commit) |
 
 ## Usage
 
@@ -31,7 +32,7 @@ Server = https://github.com/ericklv/pilo-aur/releases/download/x86_64
 Then:
 
 ```sh
-sudo pacman -Sy radar-bin kubeterm-bin zlack-bin hoppscotch-bin kubetray-git browser-switcher-git
+sudo pacman -Sy radar-bin kubeterm-bin zlack-bin hoppscotch-bin kubetray-git browser-switcher-git fetch-git
 ```
 
 Updates arrive with the usual `sudo pacman -Syu`.
