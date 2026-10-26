@@ -1,0 +1,18 @@
+pkgname=zlack-bin
+pkgver=2.0.1
+pkgrel=1
+pkgdesc="A lightweight Slack desktop client built with Tauri"
+arch=('x86_64')
+url="https://github.com/ericklv/zlack"
+license=('MIT')
+depends=('webkit2gtk-4.1' 'gtk3' 'libayatana-appindicator')
+provides=('zlack')
+conflicts=('zlack')
+options=('!strip' '!debug')
+source=("https://github.com/ericklv/zlack/releases/download/v$pkgver/Zlack_${pkgver}_amd64.deb")
+sha256sums=('c24dd8a4791606bd4e7d704d32abc787f8d8a62bf28e5173d0d50c173c3adcc4')
+
+package() {
+  bsdtar -xf data.tar.gz -C "$pkgdir"
+  chmod -R go-w "$pkgdir"
+}

@@ -1,2 +1,3 @@
 kubeterm-bin kbterm/kubeterm
 radar-bin skyhook-io/radar
+zlack-bin ericklv/zlack

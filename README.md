@@ -6,6 +6,7 @@ Personal pacman repository (`[void]`), built by GitHub Actions and served from t
 |---|---|
 | `kubeterm-bin` | [kbterm/kubeterm](https://github.com/kbterm/kubeterm) |
 | `radar-bin` | [skyhook-io/radar](https://github.com/skyhook-io/radar) |
+| `zlack-bin` | [ericklv/zlack](https://github.com/ericklv/zlack) |
 
 ## Usage
 
@@ -27,7 +28,7 @@ Server = https://github.com/ericklv/pilo-aur/releases/download/x86_64
 Then:
 
 ```sh
-sudo pacman -Sy radar-bin kubeterm-bin
+sudo pacman -Sy radar-bin kubeterm-bin zlack-bin
 ```
 
 Updates arrive with the usual `sudo pacman -Syu`.
