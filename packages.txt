@@ -5,3 +5,4 @@ hoppscotch-bin hoppscotch/releases
 kubetray-git -
 browser-switcher-git -
 fetch-git -
+orchard-bin latest.sh

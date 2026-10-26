@@ -1,0 +1,48 @@
+pkgname=orchard-bin
+_tag=1.0.0-canary.10
+pkgver=${_tag//-/}
+pkgrel=1
+pkgdesc="The power-user desktop client for YouTube Music"
+arch=('x86_64')
+url="https://github.com/SFG5453/Orchard"
+license=('AGPL-3.0-or-later' 'LicenseRef-PolyForm-Shield-1.0.0')
+depends=('glibc' 'gcc-libs' 'libglvnd')
+makedepends=('squashfs-tools')
+provides=('orchard')
+conflicts=('orchard')
+options=('!strip' '!debug')
+source=("Orchard-$_tag.AppImage::https://depot.sfg545.dev/downloads/canary/$_tag/Orchard-Linux-x86_64.AppImage")
+noextract=("Orchard-$_tag.AppImage")
+sha256sums=('fcc02bab00c9481c3d35b178fa4ecf1590258a0a48cfbfe143a135f1c670a4fc')
+
+prepare() {
+  local appimage="Orchard-$_tag.AppImage"
+  # the squashfs payload starts right after the ELF runtime's section header table
+  local shoff=$(od -An -tu8 -j40 -N8 "$appimage")
+  local shentsize=$(od -An -tu2 -j58 -N2 "$appimage")
+  local shnum=$(od -An -tu2 -j60 -N2 "$appimage")
+  rm -rf squashfs-root
+  unsquashfs -q -o $((shoff + shentsize * shnum)) -d squashfs-root "$appimage" >/dev/null
+}
+
+package() {
+  install -d "$pkgdir/opt"
+  cp -a squashfs-root/usr "$pkgdir/opt/orchard"
+  rm -rf "$pkgdir/opt/orchard/share/"{applications,icons,pixmaps}
+
+  # same environment as the AppImage's AppRun
+  install -Dm755 /dev/stdin "$pkgdir/usr/bin/orchard" <<'EOF'
+#!/bin/sh
+here=/opt/orchard
+export PATH="$here/bin:$PATH"
+export QTWEBENGINEPROCESS_PATH="$here/bin/QtWebEngineProcess"
+export QTWEBENGINE_RESOURCES_PATH="$here/resources"
+export QTWEBENGINE_LOCALES_PATH="$here/translations/qtwebengine_locales"
+exec "$here/bin/orchard" "$@"
+EOF
+
+  install -Dm644 squashfs-root/usr/share/applications/orchard.desktop -t "$pkgdir/usr/share/applications"
+  cp -a squashfs-root/usr/share/icons "$pkgdir/usr/share/"
+  install -d "$pkgdir/usr/share/licenses/$pkgname"
+  ln -s /opt/orchard/share/orchard/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

@@ -3,5 +3,7 @@ out/
 /*/*
 !/*/PKGBUILD
 !/*/.SRCINFO
+!/*/latest.sh
 !/.github/workflows/
 todo_repo.md
+candidatos.md

@@ -25,7 +25,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
     steps:
-      - run: pacman -Syu --noconfirm git github-cli pacman-contrib
+      - run: pacman -Syu --noconfirm git github-cli jq pacman-contrib
 
       - uses: actions/checkout@v4
 

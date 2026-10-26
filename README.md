@@ -11,6 +11,7 @@ Personal pacman repository (`[void]`), built by GitHub Actions and served from t
 | `kubetray-git` | [ericklv/kubetray](https://github.com/ericklv/kubetray) (latest commit) |
 | `browser-switcher-git` | [ericklv/browser-switcher](https://github.com/ericklv/browser-switcher) (latest commit) |
 | `fetch-git` | [areofyl/fetch](https://github.com/areofyl/fetch) (latest commit) |
+| `orchard-bin` | [SFG5453/Orchard](https://github.com/SFG5453/Orchard) (AppImage from the canary depot) |
 
 ## Usage
 
@@ -32,7 +33,7 @@ Server = https://github.com/ericklv/pilo-aur/releases/download/x86_64
 Then:
 
 ```sh
-sudo pacman -Sy radar-bin kubeterm-bin zlack-bin hoppscotch-bin kubetray-git browser-switcher-git fetch-git
+sudo pacman -Sy radar-bin kubeterm-bin zlack-bin hoppscotch-bin kubetray-git browser-switcher-git fetch-git orchard-bin
 ```
 
 Updates arrive with the usual `sudo pacman -Syu`.
@@ -53,6 +54,7 @@ Create `<pkgname>/PKGBUILD` (with `.SRCINFO`) and add a line to `packages.txt`:
 
 - `<pkgname> <owner/repo>`: tracks the upstream latest release (bumps `pkgver`, or `_tag` if the PKGBUILD defines it).
 - `<pkgname> -`: VCS package rebuilt whenever `pkgver()` reports a new commit.
+- `<pkgname> latest.sh`: for upstreams without GitHub releases; `<pkgname>/latest.sh` prints the latest version.
 
 ## Secrets
 

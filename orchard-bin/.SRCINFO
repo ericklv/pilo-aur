@@ -1,0 +1,21 @@
+pkgbase = orchard-bin
+	pkgdesc = The power-user desktop client for YouTube Music
+	pkgver = 1.0.0canary.10
+	pkgrel = 1
+	url = https://github.com/SFG5453/Orchard
+	arch = x86_64
+	license = AGPL-3.0-or-later
+	license = LicenseRef-PolyForm-Shield-1.0.0
+	makedepends = squashfs-tools
+	depends = glibc
+	depends = gcc-libs
+	depends = libglvnd
+	provides = orchard
+	conflicts = orchard
+	noextract = Orchard-1.0.0-canary.10.AppImage
+	options = !strip
+	options = !debug
+	source = Orchard-1.0.0-canary.10.AppImage::https://depot.sfg545.dev/downloads/canary/1.0.0-canary.10/Orchard-Linux-x86_64.AppImage
+	sha256sums = fcc02bab00c9481c3d35b178fa4ecf1590258a0a48cfbfe143a135f1c670a4fc
+
+pkgname = orchard-bin

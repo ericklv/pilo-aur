@@ -7,7 +7,8 @@
 #   DRY_RUN=1 skip every write to GitHub (build + sign + repo-add only)
 #
 # packages.txt: "<dir> <owner/repo>" tracks upstream releases;
-#               "<dir> -" builds a VCS package at its latest commit
+#               "<dir> -" builds a VCS package at its latest commit;
+#               "<dir> latest.sh" takes the version printed by <dir>/latest.sh
 
 set -euo pipefail
 
@@ -66,7 +67,11 @@ while read -r dir upstream; do
     # bump _tag when the PKGBUILD derives pkgver from it, pkgver otherwise
     var=pkgver
     grep -q '^_tag=' "$pkgdir/PKGBUILD" && var=_tag
-    latest=$(gh api "repos/$upstream/releases/latest" --jq .tag_name)
+    if [ "$upstream" = latest.sh ]; then
+      latest=$(bash "$pkgdir/latest.sh")
+    else
+      latest=$(gh api "repos/$upstream/releases/latest" --jq .tag_name)
+    fi
     latest=${latest#v}
     current=$(sed -n "s/^$var=//p" "$pkgdir/PKGBUILD")
     if [ -n "$latest" ] && [ "$latest" != "$current" ]; then
