@@ -48,11 +48,10 @@ if [ "$DRY_RUN" != 1 ]; then
   fi
 fi
 
-built=()
-stale=()
-
-while read -r dir upstream; do
-  [ -z "$dir" ] || [[ $dir == \#* ]] && continue
+# Runs in a subshell per package (results go to $OUT/.built and $OUT/.stale)
+# so one broken package doesn't stop the rest from being published.
+process_pkg() {
+  local dir=$1 upstream=$2
   pkgdir="$PWD/$dir"
 
   if [ "$(id -u)" = 0 ]; then
@@ -85,24 +84,51 @@ while read -r dir upstream; do
   pkgfile=$(basename "$pkgfile")
   if grep -qxF "$pkgfile" <<<"$assets"; then
     log "$dir: $pkgfile already published"
-    continue
+    return
   fi
 
   log "$dir: building $pkgfile"
   as_builder "$pkgdir" "makepkg -f --nodeps --noconfirm"
   cp "$pkgdir/$pkgfile" "$OUT/"
   gpg --batch --yes --detach-sign --no-armor -u "$KEYID" "$OUT/$pkgfile"
-  built+=("$OUT/$pkgfile" "$OUT/$pkgfile.sig")
+  printf '%s\n' "$OUT/$pkgfile" "$OUT/$pkgfile.sig" >> "$OUT/.built"
 
   pkgname=$(sed -n 's/^pkgname=//p' "$pkgdir/PKGBUILD")
   while read -r old; do
-    [ -n "$old" ] && [ "$old" != "$pkgfile" ] && [ "$old" != "$pkgfile.sig" ] && stale+=("$old")
+    [ -n "$old" ] && [ "$old" != "$pkgfile" ] && [ "$old" != "$pkgfile.sig" ] && echo "$old" >> "$OUT/.stale"
   done < <(grep -E "^$pkgname-[^-]+-[^-]+-[^-]+\.pkg\.tar\.zst(\.sig)?$" <<<"$assets" || true)
+}
+
+rm -f "$OUT/.built" "$OUT/.stale"
+failed=()
+while read -r dir upstream; do
+  [ -z "$dir" ] || [[ $dir == \#* ]] && continue
+  set +e
+  (set -e; process_pkg "$dir" "$upstream") </dev/null
+  rc=$?
+  set -e
+  if [ $rc != 0 ]; then
+    log "$dir: FAILED (exit $rc), skipping"
+    failed+=("$dir")
+    # drop a half-done bump so the next run retries from a clean recipe
+    git checkout -- "$dir" 2>/dev/null || true
+  fi
 done < packages.txt
+
+mapfile -t built < <(cat "$OUT/.built" 2>/dev/null)
+mapfile -t stale < <(cat "$OUT/.stale" 2>/dev/null)
+
+finish() {
+  if [ ${#failed[@]} != 0 ]; then
+    echo "failed packages: ${failed[*]}" >&2
+    exit 1
+  fi
+  exit 0
+}
 
 if [ ${#built[@]} = 0 ]; then
   log "nothing new to publish"
-  exit 0
+  finish
 fi
 
 log "updating $REPO_NAME database"
@@ -119,7 +145,7 @@ gpg --armor --export "$KEYID" > "$OUT/$REPO_NAME.asc"
 if [ "$DRY_RUN" = 1 ]; then
   log "DRY_RUN: would upload"; ls -l "$OUT"
   [ ${#stale[@]} = 0 ] || log "DRY_RUN: would delete ${stale[*]}"
-  exit 0
+  finish
 fi
 
 log "uploading to release $TAG"
@@ -129,3 +155,4 @@ for old in "${stale[@]}"; do
   log "removing old asset $old"
   gh release delete-asset "$TAG" "$old" --yes
 done
+finish

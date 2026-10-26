@@ -37,6 +37,8 @@ jobs:
       - run: ./build.sh
 
       - name: Commit bumped PKGBUILDs
+        # also after a partial failure, so successful bumps are kept
+        if: success() || failure()
         run: |
           git config --global --add safe.directory "$PWD"
           git config user.name "github-actions[bot]"
