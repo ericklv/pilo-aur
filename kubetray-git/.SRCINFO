@@ -1,0 +1,18 @@
+pkgbase = kubetray-git
+	pkgdesc = Tray app to switch the current Kubernetes context
+	pkgver = r5.8ecf218
+	pkgrel = 1
+	url = https://github.com/ericklv/kubetray
+	arch = x86_64
+	license = AGPL-3.0-only
+	makedepends = git
+	makedepends = go
+	depends = dbus
+	optdepends = kubectl: switch contexts (any kubectl in PATH works)
+	optdepends = google-cloud-cli: GKE sessions and kubetray-sync-gke
+	provides = kubetray
+	conflicts = kubetray
+	source = git+https://github.com/ericklv/kubetray.git
+	sha256sums = SKIP
+
+pkgname = kubetray-git

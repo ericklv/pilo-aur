@@ -1,3 +1,6 @@
 kubeterm-bin kbterm/kubeterm
 radar-bin skyhook-io/radar
 zlack-bin ericklv/zlack
+hoppscotch-bin hoppscotch/releases
+kubetray-git -
+browser-switcher-git -

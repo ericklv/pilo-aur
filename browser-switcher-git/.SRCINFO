@@ -1,0 +1,17 @@
+pkgbase = browser-switcher-git
+	pkgdesc = Tray app to pick the system default web browser
+	pkgver = r5.b8a1abe
+	pkgrel = 1
+	url = https://github.com/ericklv/browser-switcher
+	arch = x86_64
+	license = AGPL-3.0-only
+	makedepends = git
+	makedepends = go
+	depends = dbus
+	depends = xdg-utils
+	provides = browser-switcher
+	conflicts = browser-switcher
+	source = git+https://github.com/ericklv/browser-switcher.git
+	sha256sums = SKIP
+
+pkgname = browser-switcher-git

@@ -5,6 +5,9 @@
 # Env:
 #   GH_REPO   owner/repo that hosts the release (required unless DRY_RUN=1)
 #   DRY_RUN=1 skip every write to GitHub (build + sign + repo-add only)
+#
+# packages.txt: "<dir> <owner/repo>" tracks upstream releases;
+#               "<dir> -" builds a VCS package at its latest commit
 
 set -euo pipefail
 
@@ -51,13 +54,26 @@ while read -r dir upstream; do
   [ -z "$dir" ] || [[ $dir == \#* ]] && continue
   pkgdir="$PWD/$dir"
 
-  latest=$(gh api "repos/$upstream/releases/latest" --jq .tag_name)
-  latest=${latest#v}
-  current=$(sed -n 's/^pkgver=//p' "$pkgdir/PKGBUILD")
-  if [ -n "$latest" ] && [ "$latest" != "$current" ]; then
-    log "$dir: $current -> $latest"
-    sed -i "s/^pkgver=.*/pkgver=$latest/; s/^pkgrel=.*/pkgrel=1/" "$pkgdir/PKGBUILD"
-    as_builder "$pkgdir" "updpkgsums && makepkg --printsrcinfo > .SRCINFO"
+  if [ "$(id -u)" = 0 ]; then
+    makedeps=$(cd "$pkgdir" && source PKGBUILD && echo "${makedepends[@]}")
+    [ -z "$makedeps" ] || pacman -S --needed --noconfirm $makedeps
+  fi
+
+  if [ "$upstream" = - ]; then
+    # VCS package: fetch sources so pkgver() rewrites pkgver to the latest commit
+    as_builder "$pkgdir" "makepkg -od --nodeps --noconfirm && makepkg --printsrcinfo > .SRCINFO"
+  else
+    # bump _tag when the PKGBUILD derives pkgver from it, pkgver otherwise
+    var=pkgver
+    grep -q '^_tag=' "$pkgdir/PKGBUILD" && var=_tag
+    latest=$(gh api "repos/$upstream/releases/latest" --jq .tag_name)
+    latest=${latest#v}
+    current=$(sed -n "s/^$var=//p" "$pkgdir/PKGBUILD")
+    if [ -n "$latest" ] && [ "$latest" != "$current" ]; then
+      log "$dir: $current -> $latest"
+      sed -i "s/^$var=.*/$var=$latest/; s/^pkgrel=.*/pkgrel=1/" "$pkgdir/PKGBUILD"
+      as_builder "$pkgdir" "updpkgsums && makepkg --printsrcinfo > .SRCINFO"
+    fi
   fi
 
   pkgfile=$(basename "$(as_builder "$pkgdir" "makepkg --packagelist")")

@@ -1,0 +1,31 @@
+pkgname=browser-switcher-git
+_pkgname=browser-switcher
+pkgver=r5.b8a1abe
+pkgrel=1
+pkgdesc="Tray app to pick the system default web browser"
+arch=('x86_64')
+url="https://github.com/ericklv/browser-switcher"
+license=('AGPL-3.0-only')
+depends=('dbus' 'xdg-utils')
+makedepends=('git' 'go')
+provides=("$_pkgname")
+conflicts=("$_pkgname")
+source=("git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$_pkgname"
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+  cd "$_pkgname"
+  export GOFLAGS="-buildmode=pie -trimpath -mod=readonly -modcacherw"
+  go build -o "$_pkgname" .
+}
+
+package() {
+  cd "$_pkgname"
+  install -Dm755 "$_pkgname" "$pkgdir/usr/bin/$_pkgname"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

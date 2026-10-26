@@ -1,6 +1,7 @@
 out/
-*/src/
-*/pkg/
-*.deb
-*.pkg.tar.*
+# package dirs only track their recipe
+/*/*
+!/*/PKGBUILD
+!/*/.SRCINFO
+!/.github/workflows/
 todo_repo.md
