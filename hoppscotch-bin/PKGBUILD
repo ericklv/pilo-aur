@@ -1,5 +1,5 @@
 pkgname=hoppscotch-bin
-_tag=26.9.0-0
+_tag=26.10.0-0
 pkgver=${_tag//-/.}
 pkgrel=1
 pkgdesc="Desktop App for hoppscotch.io"
@@ -11,7 +11,7 @@ provides=('hoppscotch')
 conflicts=('hoppscotch')
 options=('!strip' '!debug')
 source=("https://github.com/hoppscotch/releases/releases/download/v$_tag/Hoppscotch_linux_x64.deb")
-sha256sums=('1804cf1fdae3b9f5546e82f171c3f63045b3378253c1300700ab6695779ad569')
+sha256sums=('fc47ad6fb85699d67f995f759382bb78adab5382e1295f0241d2f6b0ec8d58dc')
 
 package() {
   bsdtar -xf data.tar.gz -C "$pkgdir"
