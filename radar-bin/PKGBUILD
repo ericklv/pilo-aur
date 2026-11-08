@@ -1,5 +1,5 @@
 pkgname=radar-bin
-pkgver=1.20.0
+pkgver=1.20.1
 pkgrel=1
 pkgdesc="Kubernetes visibility desktop app — topology, traffic, and Helm management"
 arch=('x86_64')
@@ -10,7 +10,7 @@ provides=('radar-desktop')
 conflicts=('radar-desktop')
 options=('!strip' '!debug')
 source=("https://github.com/skyhook-io/radar/releases/download/v$pkgver/radar-desktop_v${pkgver}_linux_amd64.deb")
-sha256sums=('e1be0890f222a17bebcea99790b02e3eb1f6627f94c2a6d65ba5a76a6f08bb76')
+sha256sums=('57d219b4a645411f7238ec51eec99a0c04bebecb835f4f250a2d997e050fd226')
 
 package() {
   bsdtar -xf data.tar.gz -C "$pkgdir"
