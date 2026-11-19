@@ -1,5 +1,5 @@
 pkgname=kubeterm-bin
-pkgver=2.8.3
+pkgver=2.8.4
 pkgrel=1
 pkgdesc="Kubernetes monitoring and management desktop client"
 arch=('x86_64')
@@ -10,7 +10,7 @@ provides=('kubeterm')
 conflicts=('kubeterm')
 options=('!strip' '!debug')
 source=("https://github.com/kbterm/kubeterm/releases/download/v$pkgver/kubeterm-$pkgver-x86_64.deb")
-sha256sums=('5eaa4f6c8345e6efd4cfbdec42b935d3d442c92f63e2f1f1b11884d30a51211a')
+sha256sums=('c91447d6e7a4fbbe49e64ebdd828b21c4c20bff60c206824a14d2f21e76eee93')
 
 package() {
   bsdtar -xf data.tar.zst -C "$pkgdir"
