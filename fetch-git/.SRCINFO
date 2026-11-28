@@ -1,6 +1,6 @@
 pkgbase = fetch-git
 	pkgdesc = An animated 3D fetch tool for your terminal
-	pkgver = 2.3.0.r44.g394eb74
+	pkgver = 2.3.0.r54.g5905253
 	pkgrel = 1
 	url = https://github.com/areofyl/fetch
 	arch = x86_64
